@@ -199,7 +199,8 @@ export class Transformer {
         ],
         includeJsAttributes: [
             '^x-'
-        ]
+        ],
+        normalizeInlineSlotNames: true,
     }
 
     constructor(doc: BladeDocument) {
@@ -615,9 +616,10 @@ export class Transformer {
             const open = `<x-${slug}`,
                 close = `</x-${slug}`,
                 inlineName = component.name?.inlineName as string,
-                replace = `<x-slot:${inlineName}`;
-            result = StringUtilities.safeReplaceAllInString(result, close, '</x-slot');
-            result = StringUtilities.safeReplaceAllInString(result, open, replace);
+                replaceOpen = `<x-slot:${inlineName}`,
+                replaceClose = this.transformOptions.normalizeInlineSlotNames ? `</x-slot` : `</x-slot:${inlineName}`;
+            result = StringUtilities.safeReplaceAllInString(result, close, replaceClose);
+            result = StringUtilities.safeReplaceAllInString(result, open, replaceOpen);
         });
 
         return result;

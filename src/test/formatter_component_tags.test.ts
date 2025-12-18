@@ -1,5 +1,6 @@
 import assert from 'assert';
 import { formatBladeString, formatBladeStringWithPint } from '../formatting/prettier/utils.js';
+import { defaultSettings } from '../formatting/optionDiscovery.js';
 
 suite('Component Tags', () => {
     test('it formats simple component tags', async () => {
@@ -56,6 +57,41 @@ suite('Component Tags', () => {
             `<x-slot:name param="value">
     <p>Content</p>
 </x-slot>`
+        );
+    });
+    
+    test('it does not normalize closing tag name', async () => {
+        assert.strictEqual(
+            (await formatBladeString(`<x:slot:name
+
+            param="value">
+   <p>Content</p>
+            </x:slot:name>`, {...defaultSettings, normalizeInlineSlotNames: false})).trim(),
+            `<x-slot:name param="value">
+    <p>Content</p>
+</x-slot:name>`
+        );
+        
+        assert.strictEqual(
+            (await formatBladeString(`<x-slot:name
+
+            param="value">
+   <p>Content</p>
+            </x-slot:name>`, {...defaultSettings, normalizeInlineSlotNames: false})).trim(),
+            `<x-slot:name param="value">
+    <p>Content</p>
+</x-slot:name>`
+        );
+        
+        assert.strictEqual(
+            (await formatBladeString(`<x-slot:[name]
+
+            param="value">
+   <p>Content</p>
+            </x-slot:[name]>`, {...defaultSettings, normalizeInlineSlotNames: false})).trim(),
+            `<x-slot:[name] param="value">
+    <p>Content</p>
+</x-slot:[name]>`
         );
     });
 

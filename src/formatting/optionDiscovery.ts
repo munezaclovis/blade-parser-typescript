@@ -46,7 +46,8 @@ const defaultSettings: FormattingOptions = {
     ],
     safeWrappingJsAttributes: [
         '^x-data',
-    ]
+    ],
+    normalizeInlineSlotNames: true,
 };
 
 export { defaultSettings };
@@ -156,7 +157,8 @@ export function parseBladeConfigObject(configObject: any): FormattingOptions {
         formatJsAttributes = defaultSettings.formatJsAttributes,
         includeJsAttributes = defaultSettings.includeJsAttributes,
         excludeJsAttributes = defaultSettings.excludeJsAttributes,
-        safeWrappingJsAttributes = defaultSettings.safeWrappingJsAttributes;
+        safeWrappingJsAttributes = defaultSettings.safeWrappingJsAttributes,
+        normalizeInlineSlotNames = defaultSettings.normalizeInlineSlotNames;
 
     if (typeof configObject.ignoreDirectives !== 'undefined' && configObject.ignoreDirectives !== null) {
         ignoreDirectives = configObject.ignoreDirectives as string[];
@@ -245,6 +247,10 @@ export function parseBladeConfigObject(configObject: any): FormattingOptions {
     if (typeof configObject.safeWrappingJsAttributes !== 'undefined') {
         safeWrappingJsAttributes = configObject.safeWrappingJsAttributes as string[];
     }
+    
+    if (typeof configObject.normalizeInlineSlotNames !== 'undefined') {
+        normalizeInlineSlotNames = configObject.normalizeInlineSlotNames as boolean;
+    }
 
     if (spacesAfterDirective < 0) {
         spacesAfterDirective = 0;
@@ -289,7 +295,8 @@ export function parseBladeConfigObject(configObject: any): FormattingOptions {
         formatJsAttributes: formatJsAttributes,
         includeJsAttributes: includeJsAttributes,
         excludeJsAttributes: excludeJsAttributes,
-        safeWrappingJsAttributes: safeWrappingJsAttributes
+        safeWrappingJsAttributes: safeWrappingJsAttributes,
+        normalizeInlineSlotNames: normalizeInlineSlotNames
     };
 }
 

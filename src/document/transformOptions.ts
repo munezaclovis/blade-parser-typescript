@@ -21,4 +21,5 @@ export interface TransformOptions {
     safeWrappingJsAttributes: string[],
     includeJsAttributes: string[],
     excludeJsAttributes: string[],
+    normalizeInlineSlotNames: boolean,
 }

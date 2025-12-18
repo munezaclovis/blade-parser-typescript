@@ -1,5 +1,6 @@
 import assert from 'assert';
 import { formatBladeStringWithPint } from '../formatting/prettier/utils.js';
+import { defaultSettings } from '../formatting/optionDiscovery.js';
 
 suite('Pint Transformer: Component Tags', () => {
     test('pint: it formats simple component tags', async () => {
@@ -56,6 +57,41 @@ suite('Pint Transformer: Component Tags', () => {
             `<x-slot:name param="value">
     <p>Content</p>
 </x-slot>`
+        );
+    });
+    
+    test('pint: it does not normalize inline name pairs', async () => {
+        assert.strictEqual(
+            (await formatBladeStringWithPint(`<x:slot:name
+
+            param="value">
+   <p>Content</p>
+            </x:slot:name>`, {...defaultSettings,  normalizeInlineSlotNames: false})).trim(),
+            `<x-slot:name param="value">
+    <p>Content</p>
+</x-slot:name>`
+        );
+        
+        assert.strictEqual(
+            (await formatBladeStringWithPint(`<x:slot:[name]
+
+            param="value">
+   <p>Content</p>
+            </x:slot:[name]>`, {...defaultSettings,  normalizeInlineSlotNames: false})).trim(),
+            `<x-slot:[name] param="value">
+    <p>Content</p>
+</x-slot:[name]>`
+        );
+        
+        assert.strictEqual(
+            (await formatBladeStringWithPint(`<x-slot:[name]
+
+            param="value">
+   <p>Content</p>
+            </x-slot:[name]>`, {...defaultSettings,  normalizeInlineSlotNames: false})).trim(),
+            `<x-slot:[name] param="value">
+    <p>Content</p>
+</x-slot:[name]>`
         );
     });
 
